@@ -8,19 +8,11 @@ import numpy as np
 
 from torch.utils.data import Dataset
 
-# 以下库是yousurf使用的
-import torchio as tio
-from torchio.transforms import (
-    ZNormalization,
-    Compose,
-)
-
-
 def get_data_k(data_root, k=0, i=0, is_train=True):
     """
     Store all raws and gts path into return parameters.
     Args:
-        k: 数据被分割成k等分，k=1时不分割，直接随机分成训练集和验证集（4:1）
+        k: The data is divided into k equal parts. When k = 1, no splitting is done; instead, the data is randomly divided into training and validation sets in a 4:1 ratio.
         i: the ith fold
         data_root: the path of raw and gt folder.
         is_train: True for train or validate. False for tests.
@@ -30,7 +22,7 @@ def get_data_k(data_root, k=0, i=0, is_train=True):
 
     if is_train:
         sub_dir = 'train'
-        # 获取所有图像和ground truth的路径
+        # Get the paths of all images and ground truth.
         raw_path = os.path.join(data_root, sub_dir, 'raw')
         gt_path = os.path.join(data_root, sub_dir, 'gt')
         # for file in glob.glob(os.path.join(raw_path, '*.nii.gz')):
@@ -50,7 +42,7 @@ def get_data_k(data_root, k=0, i=0, is_train=True):
             gts_train = []
             raws_valid = []
             gts_valid = []
-            # 直接随机分成训练集和验证集，train:val = 4:1
+            # randomly split into  train:val = 4:1
             dataset_size = len(raws)
             valid_size = dataset_size // 5
             valid_index = random.sample(range(dataset_size), valid_size)
@@ -63,16 +55,17 @@ def get_data_k(data_root, k=0, i=0, is_train=True):
             return raws_train, gts_train, raws_valid, gts_valid
 
         else:
-            # 返回第 i+1 折 (i = 0:k-1) 交叉验证时所需要的训练和验证数据，raw_train为训练集，raw_valid为验证集
-            fold_size = len(raws) // k  # 每份的个数:数据总条数/折数（组数）
+            # Return the training and validation data needed for the (i+1)-th fold (i = 0:k-1) in cross-validation.
+            # `raw_train` is the training set and `raw_valid` is the validation set.
+            fold_size = len(raws) // k  # num of items per fold = (total num of data / num of folds).
             val_start = i * fold_size
             if i != k - 1:
                 val_end = (i + 1) * fold_size
                 raws_valid, gts_valid = raws[val_start:val_end], gts[val_start:val_end]
                 raws_train = raws[0:val_start] + raws[val_end:]
                 gts_train = gts[0:val_start] + gts[val_end:]
-            else:  # 若是最后一折交叉验证
-                raws_valid, gts_valid = raws[val_start:], gts[val_start:]  # 若不能整除，将多的case放在最后一折里
+            else:
+                raws_valid, gts_valid = raws[val_start:], gts[val_start:]
                 raws_train = raws[0:val_start]
                 gts_train = gts[0:val_start]
             return raws_train, gts_train, raws_valid, gts_valid
@@ -107,9 +100,6 @@ class VesselDataTransformer(Dataset):
         self.gts = gts
         self.to_tensor = T.ToTensor()
 
-        # 下面是yousurf的代码
-        self.subjects = []
-
     def __len__(self):
         return len(self.raws)
 
@@ -121,11 +111,11 @@ class VesselDataTransformer(Dataset):
         gt = nib.load(gt_path)
         gt = gt.get_fdata().astype(np.float32)
 
-        # 裁减 3-D raw and gt
+        # crop 3-D raw and gt
         raw_patch = fixed_patch_crop(raw, self.patch_center, self.patch_size)
         gt_patch = fixed_patch_crop(gt, self.patch_center, self.patch_size)
 
-        # 对batch进行zero-mean处理，mean -> 0, std -> unit std
+        # zero-mean to each batch，mean -> 0, std -> unit std
         raw_patch = intensity_normalization(raw_patch)
 
         # toTensor -> (C, z, x ,y)

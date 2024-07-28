@@ -1,53 +1,54 @@
-# 模型保存和可视化设置
+# path for saving trained models
 checkpoint_dir: './checkpoint'
+# path for saving prediction results
 pred_dir: './predictions'
 
-# 模型
+# model name and input/output channels
 model:
   name: CONANet
   input_channels: 1
   output_channels: 1
 
-# trainer设置
+# trainer initiation
 train:
   train_mode: k_fold
-  # 仅在k_fold模式下可使用，将数据分为k个fold, k>=2
-  num_fold: 1
-  # 每次iteration进行训练的样本数量
+  # k-fold training
+  num_fold: 5
+  # batch size of each iteration
   batch_size: 2
-  # epoch的次数
-  epochs: 50
-  # 多少次epoch后进行验证
-  validate_after_epochs: 1
-  # 最大的iteration次数
-  max_num_iterations: 150000
+  # num of epoch
+  epochs: NUM_EPOCHS
+  # validation per [X] epoch
+  validate_after_epochs: X
+  # max iterations
+  max_num_iterations: MAX_ITERATIONS
 
-  # 主要做导入数据和数据变换，在代码中将train和val分开
+  # For dataset import and transformation, and separating train and val datasets
   data_loader:
-    # 数据加载时的线程数
+    # data loading threads
     num_workers: 32
-    # 图形库名称
+    # name of dataset
     dataset_name: IXI
-    # 图像文件所在根目录，代码中
-    data_path: /media/aaron/data_0/cerebrovascular/datasets/IXI/IXI_labeled
-    # 图像裁切的尺寸，现在是固定裁切[W, H, Slice]
-    patch_size: [400, 400, 64]
-    # 选择固定裁切的中心
-    patch_center: [500, 500, 40]
+    # path for TRAINING dataset
+    data_path: "ABSOLUTE/PATH/TO/YOUR/TRAINING/DATA"
+    # Crop Data to a FIX size
+    patch_size: [W, H, Slice]
+    # Crop Center
+    patch_center: [W, H, Slice]
 
-# 损失函数
+# loss function
 loss:
   name: AdaptiveRegionalEdgeDiceCLDiceLoss # EdgeDiceCLDiceLoss  # EdgeReinforceLoss # AdaptiveRegionalEdgeDiceCLDiceLoss
   # a target value that is ignored and does not contribute to the input gradient
   ignore_index: null
   # skip the last channel in the target (i.e. when last channel contains data not relevant for the loss)
   skip_last_target: true
-  # ER损失的阈值
+  # threshold ONLY for ER loss
   threshold: 0.8
-  # Adaptive Region Speciﬁc Loss 中需要定义 partition_size
-  partition_size: 16 # 即 16*16*16
+  # partition_size ONLY for "Adaptive Region Speciﬁc Loss"
+  partition_size: 16 # e.g. 16*16*16
 
-# 优化器
+# optimizer
 optimizer:
   # 选择合适的optimizer
   name: Adam
@@ -56,7 +57,7 @@ optimizer:
   # weight decay
   weight_decay: 0.0005
 
-# 学习率调整
+# learning rate
 lr_scheduler:
   name: ReduceLROnPlateau
   # make sure to use the 'min' mode cause lower AdaptedRandError is better
@@ -64,18 +65,18 @@ lr_scheduler:
   factor: 0.5
   patience: 30
 
-# 评估指标
+# evaluation metrics
 eval_metric:
   name: BinaryMetrics
-  # 物理距离
-  voxel_spacing: [0.8, 0.2637, 0.2637] #  [Z, X, Y](mm)，这是IXI数据集的参数，每个数据集应设置为对应参数
+  # physical voxel space depending on data
+  voxel_spacing: [Z, X, Y] #  [Z, X, Y](mm)
 
-# 推理设置
+# test (same as prediction)
 test:
-  # 数据加载时的线程数
+  # data loading threads
   num_workers: 32
-  # 图像文件所在根目录
-  data_path: /media/aaron/data_0/cerebrovascular/datasets/IXI/IXI_labeled
+  # path for TEST dataset
+  data_path: "ABSOLUTE/PATH/TO/YOUR/TEST/DATA"
 
 
 

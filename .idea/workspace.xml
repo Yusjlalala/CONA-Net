@@ -6,20 +6,37 @@
   <component name="ChangeListManager">
     <list default="true" id="ad3b5945-f375-4db4-983e-4d7277a7c6f8" name="Changes" comment="Initial commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/CONANet.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/CONANet_Base.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_Base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/CONANet_WOCL.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_WOCL.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/CONANet_WOCONAM.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_WOCONAM.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/CONANet_WOCONAM_FC.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_WOCONAM_FC.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/CONANet_WOEDGE.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_WOEDGE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/CONANet_WOFC.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_WOFC.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/CONANet_WOLOSS.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_WOLOSS.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/CS2Net.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CS2Net.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/ERNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/ERNet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/RENet.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/RENet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/UNet2Plus.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/UNet2Plus.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/UNet3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/UNet3D.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models/VNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/VNet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_Base_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_WOCL_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_WOCONAM_FC_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_WOCONAM_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_WOEDGE_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_WOFC_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_WOLOSS_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/models/configs/IXI_CONANet_config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CS2Net_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_ERNet_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_RENet_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_UNet2Plus_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_UNet3D_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_UNet3D_crop400_cbr_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_Uception_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/IXI_VNet_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_CONANet_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_CS2Net_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_ERNet_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_RENet_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_UNet2Plus_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_UNet3D_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_Uception_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_VNet_config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/dataloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/dataloader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/losses.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/losses.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/metrics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/optimizers.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/optimizers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +101,7 @@
       <updated>1722176891056</updated>
       <workItem from="1722176892117" duration="51000" />
       <workItem from="1722176956776" duration="3502000" />
-      <workItem from="1722186046692" duration="938000" />
+      <workItem from="1722186046692" duration="6174000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <option name="closed" value="true" />
@@ -126,7 +143,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722186767224</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Initial commit">
+      <option name="closed" value="true" />
+      <created>1722186994616</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1722186994616</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -6,9 +6,9 @@ from skimage.morphology import skeletonize, skeletonize_3d
 
 class DiceCoefficient:
     """
-    计算所有通道的平均Dice Coefficient.
-    这里是训练用的，输入的是概率，一定不要做二值化处理！！！
-    训练的时候用DiceLoss时，不要用Dice作为评估标准！！ otherwise the results will be biased towards the loss.
+    Calculate the average Dice Coefficient across all channels.
+    This is used for training, so the input is probabilities; **do not** perform binarization!
+    When using DiceLoss during training, do not use Dice as an evaluation metric!! Otherwise, the results will be biased towards the loss.
     """
 
     def __init__(self, epsilon=1e-6, **kwargs):
@@ -97,7 +97,6 @@ class MeanIoU:
 class BinaryMetrics:
     def __init__(self, voxel_spacing=None):
         """ For Binary classification
-        输入均经过二值化处理，二分类的metrics直接全部计算完了
 
         Calculate [Dice], [HD95], [ASD], [Recall], [Sen], [Spec], [JC]
 
@@ -122,7 +121,6 @@ class BinaryMetrics:
         if is_train:
             return metric.binary.dc(pred, groundtruth)
         else:
-            # 测试集推理过程需要变成3个维度
             pred = pred.squeeze(0).squeeze(0)
             groundtruth = groundtruth.squeeze(0).squeeze(0)
             if len(pred.shape) != 3 and len(groundtruth.shape) != 3:
@@ -139,9 +137,6 @@ class BinaryMetrics:
 
             return dice, cldice, hd95, asd, sen, spec
 
-
-# 创建metrics常用到的方法
-#######################################################################################################################
 def compute_per_channel_dice(pred, groundtruth, epsilon=1e-6, weight=None):
     """
     注意在加载数据的时候需要归一化才可以使用此公式，对于单通道的医学图像来说channel_dice实际上也是batch_dice。

@@ -8,11 +8,12 @@ from metrics import compute_per_channel_dice, DiceCoefficient
 from torch.utils.tensorboard import SummaryWriter
 
 
-# 建立各种Loss的类
-#######################################################################################################################
+##########################
+# VARIOUS LOSS FUNCTIONS #
+##########################
 
 class BCELoss(nn.Module):
-    """Linear combination of BCE and Dice losses"""
+    """linear combination of BCE and Dice losses"""
 
     def __init__(self):
         super(BCELoss, self).__init__()
@@ -25,32 +26,32 @@ class BCELoss(nn.Module):
 
 class DiceLoss(nn.Module):
     """
-    # Input is expected to be probabilities instead of logits, input和groundtruth都是归一化的tensor
+    # input is expected to be probabilities instead of logits, input and groundtruth are normalized tensor
 
-    # 二分类或单一对象分割问题：通常用于binary数据，使用sigmoid进行channel标准化
+    # binary classification or single object segmentation problem: typically used for binary data,
+    # applying sigmoid for channel normalization.
 
-    # 多类分割问题：使用softmax进行channel标准化
+    # multi-class segmentation problem: using softmax for channel normalization.
     """
 
     def __init__(self, weight=None):
         super(DiceLoss, self).__init__()
 
     def forward(self, pred, groundtruth):
-        # 对所有通道的dice求平均得到一次iteration的Dice
         return 1. - torch.mean(compute_per_channel_dice(pred, groundtruth))
 
 
 class EdgeReinforceLoss(nn.Module):
-    """ Loss for ER-Net
+    """ loss for ER-Net
 
-    Input is expected to be probabilities instead of logits, and groundtruth should be normalized.
+    input is expected to be probabilities instead of logits, and groundtruth should be normalized.
 
     """
 
     def __init__(self, threshold=0.8):
         super(EdgeReinforceLoss, self).__init__()
-        self.weight1 = nn.Parameter(torch.Tensor([1.]).cuda().requires_grad_())  # 将权重设置为浮点数
-        self.weight2 = nn.Parameter(torch.Tensor([1.]).cuda().requires_grad_())  # 将权重设置为浮点数
+        self.weight1 = nn.Parameter(torch.Tensor([1.]).cuda().requires_grad_())
+        self.weight2 = nn.Parameter(torch.Tensor([1.]).cuda().requires_grad_())
         self.dice_coeff = DiceCoefficient()
         self.dice_loss = DiceLoss()
         self.edge_dice_loss = DiceLoss()
@@ -58,15 +59,15 @@ class EdgeReinforceLoss(nn.Module):
         self.er_threshold = threshold
 
     def forward(self, pred, groundtruth):
-        # 设置拉普拉斯卷积核
+        # set the Laplacian convolution kernel
         laplacian_kernel = torch.tensor(
             [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 26,
              -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1], dtype=torch.float32).reshape(1, 1, 3, 3, 3).cuda()
 
-        # 用拉普拉斯卷积核提取gt的边界信息
+        # extract boundary information from gt using a Laplacian convolution kernel.
         boundary_pred = F.conv3d(pred, laplacian_kernel, padding=1)
         boundary_groundtruth = F.conv3d(groundtruth, laplacian_kernel, padding=1)
-        # 这个值指只会大于0，被clamp在[min,]
+        # this value will only be greater than 0 and is clamped to be at least [min,].
         boundary_pred = boundary_pred.clamp(min=0)
         boundary_pred[boundary_pred > 0.1] = 1
         boundary_pred[boundary_pred <= 0.1] = 0
@@ -74,15 +75,15 @@ class EdgeReinforceLoss(nn.Module):
         boundary_groundtruth[boundary_groundtruth > 0.1] = 1
         boundary_groundtruth[boundary_groundtruth <= 0.1] = 0
 
-        # 用最邻近插值使得边界gt与input对齐
+        # align the boundary between gt and the input using nearest neighbor interpolation.
         if pred.shape[-1] != boundary_groundtruth.shape[-1]:
             boundary_groundtruth = F.interpolate(
                 boundary_groundtruth, pred.shape[2:], mode='nearest')
 
-        # 根据论文计算DSC作为阈值判断标准
+        # calculate DSC as the threshold criterion of EdgeReinforceLoss.
         dice_coeff = self.dice_coeff(pred, groundtruth)
 
-        # 计算loss
+        # calculate loss
         dice_loss = self.dice_loss(pred, groundtruth)
         # edge_dice_loss = self.edge_dice_loss(pred, boundary_groundtruth)
         # edge_bce_loss = self.edge_bce_loss(pred, boundary_groundtruth)
@@ -101,7 +102,7 @@ class EdgeReinforceLoss(nn.Module):
 
 
 class BCEDiceLoss(nn.Module):
-    """Linear combination of BCE and Dice losses"""
+    """linear combination of BCE and Dice losses"""
 
     def __init__(self, alpha, beta):
         super(BCEDiceLoss, self).__init__()
@@ -228,9 +229,9 @@ class SoftDiceCCLDiceLoss(nn.Module):
 
 
 class EdgeDiceCLDiceLoss(nn.Module):
-    """ Loss for Ours, (CenterLine + BCEEdge + Dice) Reinforce Loss
+    """ Loss for Ours, (CenterLine + BCEEdge + Dice) Loss
 
-    Input is expected to be probabilities instead of logits, and groundtruth should be normalized.
+    input is expected to be probabilities instead of logits, and groundtruth should be normalized.
 
     """
 
@@ -254,41 +255,21 @@ class EdgeDiceCLDiceLoss(nn.Module):
         self.smooth = 1.
 
     def forward(self, pred, groundtruth):
-        # 计算Dice作为阈值判断标准
         dice_coeff = self.dice_coeff(pred, groundtruth)
 
-        # 计算部分loss
         dice_loss = self.dice_loss(pred, groundtruth)
         dice_edge_loss, bce_edge_loss = self.dice_bce_edge_loss(pred, groundtruth)
         cl_dice_loss = self.cldice_loss(pred, groundtruth)
 
-        # 整合Loss
         if dice_coeff.float() < self.threshold:
             total_loss = dice_loss
         else:
-            ## 这里不要动了！！！，当w1,w2不可学习的时候达到Dice最大
-            total_loss = dice_loss + (self.w1.pow(-2) * dice_edge_loss
-                                      + self.w2.pow(-2) * cl_dice_loss
-                                      + (1 + self.w1.abs() * self.w2.abs()).log())
+            total_loss = dice_loss + (self.w1.pow(-2) * (dice_edge_loss + bce_edge_loss) +
+                                      self.w2.pow(-2) * cl_dice_loss +
+                                      self.w3.pow(-2) * dice_loss +
+                                      (1 + self.w1.abs() * self.w2.abs() * self.w3.abs()).log())
 
-            # total_loss = 0.4 * dice_loss + 0.3 * cl_dice_loss + 0.3 * (self.w1.pow(-2) * dice_edge_loss
-            #                                                            + self.w2.pow(-2) * bce_edge_loss
-            #                                                            + (1 + self.w1 * self.w2).log())
-
-            # total_loss = ((1 - self.alpha.cuda()) * dice_loss + self.alpha.cuda() *
-            #               (self.w1.pow(-2).cuda() * dice_edge_loss + self.w2.pow(-2).cuda() * cl_dice_loss
-            #               + (1 + self.w1.cuda() * self.w2).log()))
-
-            # total_loss = dice_loss + (self.w1.pow(-2) * dice_edge_loss
-            #                           + self.w2.pow(-2) * bce_edge_loss
-            #                           + self.w3.pow(-2) * cl_dice_loss
-            #                           + (1 + self.w1 * self.t3).log())
-
-            # total_loss = dice_loss + (#self.w1.pow(-2) * (dice_edge_loss + bce_edge_loss) +
-            #                           self.w2.pow(-2) * cl_dice_loss +
-            #                           self.w3.pow(-2) * dice_loss +
-            #                           (1 + self.w1 * self.w2 * self.w3).log())
-
+        # check the learning parameters
         print("(w1, grad1):({0:.4f}, {1:.4f})  (w2, grad2):({2:.4f}, {3:.4f}) (w3, grad3):({4:.4f}, {5:.4f})".
               format(self.w1.item(), self.w1.grad.item() if self.w1.grad is not None else 0,
                      self.w2.item(), self.w2.grad.item() if self.w2.grad is not None else 0,
@@ -297,21 +278,21 @@ class EdgeDiceCLDiceLoss(nn.Module):
         return total_loss
 
     def dice_bce_edge_loss(self, pred, groundtruth):
-        # 设置边界检测卷积核
+        # boundary detection
         laplacian_kernel = torch.tensor(
             [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 26,
              -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1], dtype=torch.float32).reshape(1, 1, 3, 3, 3).cuda()
 
-        # 二值化prediction
+        # binarized prediction
         boundary_pred = pred.detach().clone()
         boundary_pred[boundary_pred > 0.5] = 1
         boundary_pred[boundary_pred <= 0.5] = 0
 
-        # 用拉普拉斯卷积核提取gt的边界信息
+        # boundary info of gt
         boundary_pred = F.conv3d(boundary_pred, laplacian_kernel, padding=1)
         boundary_groundtruth = F.conv3d(groundtruth, laplacian_kernel, padding=1)
 
-        # 这个值指只会大于0，被clamp在[min,]
+        # greater than 0 and is clamped at [min,]
         boundary_pred = boundary_pred.clamp(min=0)
         boundary_pred[boundary_pred > 0.1] = 1
         boundary_pred[boundary_pred <= 0.1] = 0
@@ -319,13 +300,10 @@ class EdgeDiceCLDiceLoss(nn.Module):
         boundary_groundtruth[boundary_groundtruth > 0.1] = 1
         boundary_groundtruth[boundary_groundtruth <= 0.1] = 0
 
-        # 用最邻近插值使得边界gt与input对齐
         if pred.shape[-1] != boundary_groundtruth.shape[-1]:
             boundary_groundtruth = F.interpolate(
                 boundary_groundtruth, pred.shape[2:], mode='nearest')
 
-        # return (self.dice_edge_loss(pred, boundary_groundtruth),
-        #         F.binary_cross_entropy(pred, boundary_groundtruth))
         return (self.dice_edge_loss(boundary_pred, boundary_groundtruth),
                 F.binary_cross_entropy(boundary_pred, boundary_groundtruth))
 
@@ -384,13 +362,13 @@ class AdaRegSpecLoss(nn.Module):
         pred_final = torch.Tensor([]).cuda()
         gt_final = torch.Tensor([]).cuda()
 
-        # 计算小块在各个维度的总数
+        # calculate the total number of blocks in each dimension.
         num_N = groundtruth.size()[0]
         num_z = groundtruth.size()[2] // self.pz
         num_x = groundtruth.size()[3] // self.pz
         num_y = groundtruth.size()[4] // self.pz
 
-        # 将tensor分割成M个16*16*16的小块，即维度为(M, 16, 16, 16)
+        # Divide the tensor into M small blocks of size 16x16x16, resulting in a dimension of (M, 16, 16, 16).
         for NN in range(num_N):
             gt_plane = torch.split(groundtruth[NN, :, :, :, :], self.pz, 1)
             pred_plane = torch.split(pred[NN, :, :, :, :], self.pz, 1)
@@ -404,27 +382,27 @@ class AdaRegSpecLoss(nn.Module):
                         gt_final = torch.cat((gt_final, gt_point[yy]), dim=0)
                         pred_final = torch.cat((pred_final, pred_point[yy]), dim=0)
 
-        # 将所有小块拉成向量 (M, 16*16*16)
+        # convert into a vector (num_N, 16*16*16)
         pred_final = torch.flatten(pred_final, start_dim=1, end_dim=-1)
         gt_final = torch.flatten(gt_final, start_dim=1, end_dim=-1)
 
-        # 计算需要用的到confusing matrix数据TP, FN 和 FP
+        # calculate TP, FN and FP
         tp = torch.sum(gt_final * pred_final, dim=1)
         fn = torch.sum(gt_final * (1 - pred_final), dim=1)
         fp = torch.sum((1 - gt_final) * pred_final, dim=1)
 
-        # 计算自适应参数
+        # calculate adaptive parameters
         alpha = self.a + self.b * ((fp + self.smooth) / (fp + fn + self.smooth))
         beta = self.a + self.b * ((fn + self.smooth) / (fp + fn + self.smooth))
 
-        # 加和Loss
         loss = torch.sum(1. - (tp + self.smooth) / (tp + alpha * fp + beta * fn + self.smooth))
 
         return loss
 
 
+# L_AC
 class AdaptiveRegionalEdgeDiceCLDiceLoss(nn.Module):
-    """ Loss for Ours, (CenterLine + Edge + Dice) Reinforce Loss
+    """ Loss for Ours, (CenterLine + Edge + Dice + Adaptive) Loss
 
     Input is expected to be probabilities instead of logits, and groundtruth should be normalized.
 
@@ -434,12 +412,11 @@ class AdaptiveRegionalEdgeDiceCLDiceLoss(nn.Module):
         super(AdaptiveRegionalEdgeDiceCLDiceLoss, self).__init__()
 
         self.iter_cnt = 0
-        self.tb_writer_weight = SummaryWriter(log_dir='./logs/0_LAC_logs/' + time.strftime('%Y%m%d_%H%M%S',
-                                                                                           time.localtime(time.time())))
+        self.tb_writer_weight = SummaryWriter(log_dir='./logs/LAC_logs/' + time.strftime('%Y%m%d_%H%M%S',
+                                                                                         time.localtime(time.time())))
 
         self.dice_coeff = DiceCoefficient()
 
-        # 总体参数
         self.weight0 = torch.tensor([0.5])  # 总Loss的权重
         self.dice_loss = DiceLoss()
         self.dice_edge_loss = DiceLoss()
@@ -447,8 +424,8 @@ class AdaptiveRegionalEdgeDiceCLDiceLoss(nn.Module):
         self.threshold = threshold
 
         # 局部参数
-        self.w1 = nn.Parameter(torch.Tensor([1.]))  # 局部edgeloss的权重
-        self.w2 = nn.Parameter(torch.Tensor([1.]))  # 局部clloss的权重
+        self.w1 = nn.Parameter(torch.Tensor([1.]))  # weight of regional edgeloss
+        self.w2 = nn.Parameter(torch.Tensor([1.]))  # weight of clloss
         # self.a = nn.Parameter(torch.Tensor([0.5]).cuda().requires_grad_())
         # self.b = nn.Parameter(torch.Tensor([0.5]).cuda().requires_grad_())
         self.a = torch.tensor([0.5])
@@ -460,11 +437,11 @@ class AdaptiveRegionalEdgeDiceCLDiceLoss(nn.Module):
         self.adp_smooth = 1e-8
 
     def forward(self, pred, groundtruth):
-        # 计算Dice作为阈值判断标准
+        # calculate DSC as the threshold criterion.
         dice_coeff = self.dice_coeff(pred, groundtruth)
-        # 计算部分loss
+        # calculate partial loss
         dice_loss = self.dice_loss(pred, groundtruth)
-        # 整合Loss
+        # total loss
         if dice_coeff.float() < self.threshold:
             total_loss = dice_loss
         else:
@@ -555,15 +532,13 @@ class AdaptiveRegionalEdgeDiceCLDiceLoss(nn.Module):
         return loss
 
     def bdr(self, pred, groundtruth):
-        # 设置边界检测卷积核
         laplacian_kernel = torch.tensor(
             [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 26,
              -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1], dtype=torch.float32).reshape(1, 1, 3, 3, 3).cuda()
 
-        # 用拉普拉斯卷积核提取gt的边界信息
         boundary_pred = F.conv3d(pred, laplacian_kernel, padding=1)
         boundary_groundtruth = F.conv3d(groundtruth, laplacian_kernel, padding=1)
-        # 这个值指只会大于0，被clamp在[min,]
+
         boundary_pred = boundary_pred.clamp(min=0)
         boundary_pred[boundary_pred > 0.1] = 1
         boundary_pred[boundary_pred <= 0.1] = 0
@@ -571,7 +546,6 @@ class AdaptiveRegionalEdgeDiceCLDiceLoss(nn.Module):
         boundary_groundtruth[boundary_groundtruth > 0.1] = 1
         boundary_groundtruth[boundary_groundtruth <= 0.1] = 0
 
-        # 用最邻近插值使得边界gt与input对齐
         if pred.shape[-1] != boundary_groundtruth.shape[-1]:
             boundary_groundtruth = F.interpolate(
                 boundary_groundtruth, pred.shape[2:], mode='nearest')
@@ -662,6 +636,7 @@ def create_loss(name, loss_config, weight, ignore_index, pos_weight):
     elif name == 'AdaRegSpecLoss':
         partition_size = loss_config.get('partition_size')
         return AdaRegSpecLoss(partition_size)
+    # L_AC
     elif name == 'AdaptiveRegionalEdgeDiceCLDiceLoss':
         threshold = loss_config.get('threshold')
         partition_size = loss_config.get('partition_size')

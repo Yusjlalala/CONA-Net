@@ -33,9 +33,9 @@ from models.CONANet_WOCONAM_FC import CONANet_WOCONAM_FC
 
 def test():
 
-    # 只需要修改这两个地方
-    config = load_config_ide('configs/IXI_CONANet_Base_config.yml')
-    stamp = 'CONANet_Base_1_fold_best_checkpoint.pth'
+    # once the .yml file is set up, you only need to input the corresponding file path to perform inference.
+    config = load_config_ide('PATH/TO/CONFIGURATION .yml FILES')
+    stamp = 'PATH/TO/.pth FILES'
 
     # 加载模型参数
     path = '{}/{}'.format(config['checkpoint_dir'], stamp)
@@ -51,19 +51,19 @@ def test():
         test_model = test_model.cuda()
     elif config['device'] == 'cpu':
         assert "DO NOT SUPPORT USING CPU IN THIS PROGRAMME !!!"
-    # 加载最佳训练模型参数
+
+    # load parameters of trained model
     test_model.load_state_dict(ckpt['model_state_dict'])
-    # 加载评估指标
     eval_criterion = get_evaluation_metric(config['eval_metric'])
 
-    # 加载测试数据集
+    # load test dataset
     raw_test, gt_test = get_data_k(config['test']['data_path'], is_train=False)
     test_data = VesselDataTransformer(raw_test, gt_test, config['train']['data_loader'])
     test_loader = DataLoader(dataset=test_data, batch_size=1, shuffle=False,
                              num_workers=config['test']['num_workers'])
     ref_imag_path = raw_test[0]
 
-    # 初始化记录容器
+    # initialize metrics
     test_dice = RunningAverageSTD()
     test_cldice = RunningAverageSTD()
     test_hd95 = RunningAverageSTD()
@@ -72,15 +72,15 @@ def test():
     test_spec = RunningAverageSTD()
 
     with torch.no_grad():
-        # 设置为测试（验证）模式
+        # set to test (or validation) mode
         test_model.eval()
         with alive_bar(len(test_loader), bar='classic', spinner='classic', force_tty=True) as bar:
             for index, (raw, gt) in enumerate(test_loader):
-                # 前传
+                # forward
                 raw, gt = raw.cuda(), gt.cuda()
                 pred = test_model(raw)
 
-                # 评估
+                # evaluation
                 dice, cldice, hd95, asd, sen, spec = eval_criterion(pred, gt,
                                                                     is_train=False)
                 test_dice.update(dice, batch_size=1)
@@ -90,13 +90,14 @@ def test():
                 test_sen.update(sen, batch_size=1)
                 test_spec.update(spec, batch_size=1)
 
-                # pred_name 不需要根据数据集的命名作修改
+                # The `pred_name` needs to be modified according to the naming conventions of the dataset.
                 pred_name = os.path.basename(raw_test[index])[:-7]
                 assert not ('/' in pred_name or '.' in pred_name), (
                     "Prediction name contains '/' or '.', please check the "
                     "file name!")
 
-                # 推理完的数据是[Z, X, Y]，保存前的numpy轴的顺序必须得是[Z, Y, X]！！！
+                # the inferred data is in the order [Z, X, Y],
+                # but the numpy array must be reordered to [Z, Y, X] before saving!!!
                 raw = raw.squeeze(0).squeeze(0).transpose(1, 2).detach().cpu().numpy().astype(np.float64)
                 gt = gt.squeeze(0).squeeze(0).transpose(1, 2).detach().cpu().numpy().astype(np.float64)
                 pred = pred.squeeze(0).squeeze(0).transpose(1, 2).detach().cpu().numpy().astype(np.float64)
@@ -109,7 +110,7 @@ def test():
                 # sitk.WriteImage(raw, os.path.join(config['pred_dir'], model_name + '_' + pred_name + '_raw.nii.gz'))
                 # sitk.WriteImage(pred, os.path.join(config['pred_dir'], model_name + '_' + pred_name + '_pred.nii.gz'))
                 # sitk.WriteImage(gt, os.path.join(config['pred_dir'], model_name + '_' + pred_name + '_gt.nii.gz'))
-                # 进度条＋1
+
                 bar()
 
         print(

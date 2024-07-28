@@ -21,7 +21,7 @@ def get_logger(config, log_level=logging.INFO,
         os.makedirs(log_dir)
     log_file_name = (config['train']['data_loader']['dataset_name'] + '_' + config['model']['name'])
 
-    # 在logs文件夹下创建每次实验对应的子文件夹
+    # create a subfolder corresponding to each experiment under the "./logs" folder.
     log_sub_dir = os.path.join(log_dir, log_file_name + '_' + time.strftime('%Y%m%d_%H%M%S',
                                                                             time.localtime(time.time())))
     os.makedirs(log_sub_dir)
@@ -37,15 +37,15 @@ def get_logger(config, log_level=logging.INFO,
                             handlers=[logging.FileHandler(log_file),
                                       logging.StreamHandler(sys.stdout)])
 
-    # 在这里初始化 tensorboard logs
+    # initialize tensorboard logs
     writer = SummaryWriter(log_dir=log_sub_dir)
     return writer
 
 
 def load_config_command():
-    # 这里通过命令行载入Config，如果用IDE则不需要这部分
+    # the configuration is loaded through the command line; this part is not needed if using IDE.
     parser = argparse.ArgumentParser(description='UNet3D')
-    parser.add_argument('--config', type=str, help='Path to the YAML config file', required=True)
+    parser.add_argument('--config', type=str, help='Path to the .yml config file', required=True)
     args = parser.parse_args()
     config = _load_config_yaml(args.config)
 
@@ -64,7 +64,7 @@ def load_config_command():
 
 
 def load_config_ide(config_path):
-    # 这里通过IDE载入Config
+    # the configuration is loaded through the IDE.
     config = _load_config_yaml(config_path)
     device = config.get('device', None)
     if device == 'cpu':
@@ -112,7 +112,7 @@ def save_more_checkpoint(state, checkpoint_dir, model_name, kfold, epoch):
     """Saves model
 
     Args:
-        epoch: 显示第几个epoch
+        epoch: the current epoch number
         kfold: the kth-fold of the validation
         model_name: Model Name
         state (dict): contains model's state_dict, optimizer's state_dict, epoch
@@ -156,10 +156,10 @@ def load_checkpoint(checkpoint_path, model, optimizer=None,
 
 def get_reference_geometry(image: sitk.Image, ref_path: sitk.Image):
     '''
-    读取参考图像的几何参数，以确保输出的正确性
+    load the geometric parameters of the reference image to ensure the correctness of the output.
     Args:
-        image: 需要对齐的图像
-        ref_path: 对齐的参考图像
+        image: image that need alignment
+        ref_path: reference image
 
     Returns:
         image:
@@ -175,7 +175,7 @@ def get_reference_geometry(image: sitk.Image, ref_path: sitk.Image):
 
 def get_feature_map(model, raw, epoch_cnt, feature_layer_names=None):
     with torch.no_grad():
-        # 画原始图像
+        # original image
         raw_image = raw.transpose(3, 4).detach().cpu().numpy()[0, 0, raw.shape[2] // 2, :, :].astype("float32")
         plt.title("raw")
         plt.grid(False)
@@ -183,7 +183,7 @@ def get_feature_map(model, raw, epoch_cnt, feature_layer_names=None):
         plt.imshow(raw_image)
         plt.show()
 
-        # 并行运算时需要此行
+        # parallel computing
         if isinstance(model, nn.DataParallel):
             model = model.module
 
@@ -197,7 +197,7 @@ def get_feature_map(model, raw, epoch_cnt, feature_layer_names=None):
             feature_map = feature_map[feature_layer_name].transpose(3, 4).detach().cpu().numpy()
 
             n_features = feature_map.shape[1]  # [N, C, Z, Y, X]
-            image_size = feature_map.shape[-1]  # 特征图谱的大小
+            image_size = feature_map.shape[-1]  # size of the feature map
             n_rows = 16
             n_cols = n_features // n_rows
 
@@ -206,7 +206,7 @@ def get_feature_map(model, raw, epoch_cnt, feature_layer_names=None):
                 for row in range(n_rows):
                     channel_index = col * n_rows + row
                     channel_image = feature_map[0, channel_index, feature_map.shape[2] // 2, :, :].copy()
-                    if channel_image.sum() != 0:  # 数据处理，使其适合于作为图像展示
+                    if channel_image.sum() != 0:
                         channel_image /= channel_image.max()
                         channel_image *= 255
                     channel_image = np.clip(channel_image, 0, 255).astype("uint8")
@@ -228,7 +228,7 @@ class RunningAverageSTD:
     """
 
     def __init__(self):
-        # 计算均值和标准差
+        # calculate the mean and std.
         self.metrics_list = []
         self.avg = 0.
         self.std = 0.
