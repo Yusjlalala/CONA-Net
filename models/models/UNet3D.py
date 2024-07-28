@@ -9,7 +9,7 @@ from functools import partial
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from PipeLine.models.init_weights import init_weights
+from init_weights import init_weights
 
 
 # Building Block

@@ -4,7 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ad3b5945-f375-4db4-983e-4d7277a7c6f8" name="Changes" comment="update" />
+    <list default="true" id="ad3b5945-f375-4db4-983e-4d7277a7c6f8" name="Changes" comment="Initial commit">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/CONANet.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/CONANet_Base.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_Base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/CONANet_WOCL.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_WOCL.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/CONANet_WOCONAM.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_WOCONAM.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/CONANet_WOCONAM_FC.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_WOCONAM_FC.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/CONANet_WOEDGE.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_WOEDGE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/CONANet_WOFC.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_WOFC.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/CONANet_WOLOSS.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CONANet_WOLOSS.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/CS2Net.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/CS2Net.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/ERNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/ERNet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/RENet.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/RENet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/UNet2Plus.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/UNet2Plus.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/UNet3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/UNet3D.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/VNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/VNet.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,6 +53,7 @@
     "Python.train.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "/home/aaron/projects/CONA-Net",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -67,6 +84,7 @@
       <updated>1722176891056</updated>
       <workItem from="1722176892117" duration="51000" />
       <workItem from="1722176956776" duration="3502000" />
+      <workItem from="1722186046692" duration="938000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <option name="closed" value="true" />
@@ -92,7 +110,23 @@
       <option name="project" value="LOCAL" />
       <updated>1722184781801</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Initial commit">
+      <option name="closed" value="true" />
+      <created>1722186114888</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1722186114888</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Initial commit">
+      <option name="closed" value="true" />
+      <created>1722186767224</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1722186767224</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -126,7 +160,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update" />
-    <option name="LAST_COMMIT_MESSAGE" value="update" />
+    <MESSAGE value="Revert &quot;update&quot;&#10;&#10;This reverts commit 26be377f" />
+    <MESSAGE value="Initial commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit" />
+    <option name="GROUP_MULTIFILE_MERGE_BY_DIRECTORY" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

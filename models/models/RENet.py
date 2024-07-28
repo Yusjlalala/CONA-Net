@@ -9,7 +9,7 @@ import torch.nn as nn
 from functools import partial
 
 import torch.nn.functional as F
-from PipeLine.models.init_weights import init_weights
+from init_weights import init_weights
 
 
 def downsample():

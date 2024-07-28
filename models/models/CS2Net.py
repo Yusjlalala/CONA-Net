@@ -12,7 +12,7 @@ from __future__ import division
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from PipeLine.models.init_weights import init_weights
+from models.init_weights import init_weights
 
 def downsample():
     return nn.MaxPool3d(kernel_size=2, stride=2)

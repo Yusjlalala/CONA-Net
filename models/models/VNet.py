@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 import torch.nn.functional as F
-from PipeLine.models.init_weights import init_weights
+from init_weights import init_weights
 
 class ConvBlock(nn.Module):
     def __init__(self, n_stages, n_filters_in, n_filters_out, normalization='none'):

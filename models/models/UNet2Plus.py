@@ -6,7 +6,7 @@
 
 import torch
 import torch.nn as nn
-from PipeLine.models.init_weights import init_weights
+from init_weights import init_weights
 
 class DoubleConv(nn.Module):
     def __init__(self, in_ch, out_ch):

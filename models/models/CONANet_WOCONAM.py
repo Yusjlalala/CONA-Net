@@ -10,7 +10,7 @@ import torch.nn.functional as F
 import warnings
 
 from functools import partial
-from PipeLine.models.init_weights import init_weights
+from init_weights import init_weights
 
 warnings.filterwarnings('ignore')
 
