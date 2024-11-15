@@ -6,37 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ad3b5945-f375-4db4-983e-4d7277a7c6f8" name="Changes" comment="Initial commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_Base_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_WOCL_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_WOCONAM_FC_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_WOCONAM_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_WOEDGE_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_WOFC_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_WOLOSS_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CONANet_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/models/configs/IXI_CONANet_config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_CS2Net_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_ERNet_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_RENet_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_UNet2Plus_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_UNet3D_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_UNet3D_crop400_cbr_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_Uception_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/IXI_VNet_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_CONANet_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_CS2Net_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_ERNet_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_RENet_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_UNet2Plus_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_UNet3D_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_Uception_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/configs/MIDAS_20_VNet_config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/dataloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/dataloader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/losses.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/losses.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/metrics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/optimizers.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/optimizers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/models/UNet3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/models/UNet3D.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,26 +34,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.UNet3D.executor": "Debug",
-    "Python.train.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/aaron/projects/CONA-Net",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.UNet3D.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.train.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/aaron/projects/VesselSegmentation&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "ChangesTree.GroupingKeys": [
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
     ]
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -101,7 +72,19 @@
       <updated>1722176891056</updated>
       <workItem from="1722176892117" duration="51000" />
       <workItem from="1722176956776" duration="3502000" />
-      <workItem from="1722186046692" duration="6174000" />
+      <workItem from="1722186046692" duration="6828000" />
+      <workItem from="1724238440293" duration="162000" />
+      <workItem from="1724238609779" duration="16000" />
+      <workItem from="1724238632803" duration="293000" />
+      <workItem from="1724238933132" duration="15000" />
+      <workItem from="1724238953812" duration="69000" />
+      <workItem from="1727124140575" duration="1282000" />
+      <workItem from="1727161135898" duration="10000" />
+      <workItem from="1728690625230" duration="23000" />
+      <workItem from="1728690705574" duration="12000" />
+      <workItem from="1730180302172" duration="877000" />
+      <workItem from="1730400768606" duration="628000" />
+      <workItem from="1731640930074" duration="179000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <option name="closed" value="true" />
@@ -151,7 +134,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722186994616</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Initial commit">
+      <option name="closed" value="true" />
+      <created>1722193377761</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1722193377761</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -202,7 +193,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CONA_Net$train.coverage" NAME="train Coverage Results" MODIFIED="1722184336310" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CONA_Net$UNet3D.coverage" NAME="UNet3D Coverage Results" MODIFIED="1722184218211" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/models" />
+    <SUITE FILE_PATH="coverage/CONA_Net$train.coverage" NAME="train Coverage Results" MODIFIED="1731641066188" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/models" />
+    <SUITE FILE_PATH="coverage/CONA_Net$UNet3D.coverage" NAME="UNet3D Coverage Results" MODIFIED="1731641061436" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/models/models" />
   </component>
 </project>
